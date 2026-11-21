@@ -1,0 +1,35 @@
+name: Develop preview
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: kuznecoffdesign/kuznecoff-site
+          ref: develop
+          persist-credentials: false
+      - name: Prepare preview
+        run: |
+          test -f docs/index.html
+          find docs -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' \) -exec sed -i 's|/kuznecoff-site/|/kuznecoff-preview/|g' {} +
+          touch docs/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - uses: actions/deploy-pages@v4
+        id: deployment
