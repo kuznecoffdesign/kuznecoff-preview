@@ -1,4 +1,4 @@
 # kuznecoff-preview
 GitHub Pages preview of kuznecoff-site develop
 
-Current preview source: `87ebf3aadabb1cb2613e4524f209740da3c19003`
+Current preview source: `f208a06c9b5f37364335be068230dcec5b76071c`
